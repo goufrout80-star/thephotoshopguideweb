@@ -5,8 +5,9 @@ import { Layers, Menu, X } from 'lucide-react'
 const links = [
   { href: '#work', label: 'Content' },
   { href: '#audience', label: 'Audience' },
-  { href: '#case-study', label: 'Results' },
+  { href: '#results', label: 'Results' },
   { href: '#packages', label: 'Packages' },
+  { href: '/media-kit.html', label: 'Media Kit', external: true },
 ]
 
 export default function Nav() {
@@ -56,6 +57,8 @@ export default function Nav() {
             <a
               key={l.href}
               href={l.href}
+              target={l.external ? '_blank' : undefined}
+              rel={l.external ? 'noopener' : undefined}
               className="px-4 py-2 text-sm text-ink-dim hover:text-ink transition-colors rounded-full hover:bg-panel-2"
             >
               {l.label}
@@ -68,7 +71,7 @@ export default function Nav() {
             href="#contact"
             className="inline-flex items-center whitespace-nowrap rounded-full bg-cyan px-3.5 py-2 text-xs sm:text-sm font-medium text-canvas hover:bg-ink transition-colors shrink-0"
           >
-            Book a partnership
+            Partner With Us
           </a>
 
           <button
@@ -96,6 +99,8 @@ export default function Nav() {
               <a
                 key={l.href}
                 href={l.href}
+                target={l.external ? '_blank' : undefined}
+                rel={l.external ? 'noopener' : undefined}
                 onClick={() => setMenuOpen(false)}
                 className="rounded-xl px-4 py-3 text-sm text-ink-dim hover:text-ink hover:bg-panel-2 transition-colors"
               >

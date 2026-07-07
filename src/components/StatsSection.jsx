@@ -1,6 +1,6 @@
 import { motion } from 'motion/react'
 import { useCountUp } from '../hooks/useCountUp'
-import { stats, platforms, demographics, geo } from '../data/content'
+import { stats, reelStats, demographics } from '../data/content'
 import SectionHeading from './SectionHeading'
 
 function StatCard({ stat, i }) {
@@ -25,7 +25,7 @@ function StatCard({ stat, i }) {
   )
 }
 
-function Bar({ label, value, i, color = 'bg-cyan' }) {
+function Bar({ label, value, i, color = 'bg-coral' }) {
   return (
     <div>
       <div className="flex items-center justify-between text-sm mb-1.5">
@@ -50,43 +50,60 @@ export default function StatsSection() {
   return (
     <section id="audience" className="mx-auto max-w-6xl px-6 py-24">
       <SectionHeading
-        eyebrow="The Numbers"
-        title="An audience that actually opens Photoshop."
-        desc="Not just impressions — creators, students, and working designers who follow through on what they watch."
+        eyebrow="The Audience"
+        title="A global creative audience built for brands in design, editing, and visual tools."
+        desc="This is not a general lifestyle audience. It's a focused creative community built around Photoshop, design education, visual workflows, and practical creative content."
       />
 
-      <div className="mt-12 grid grid-cols-2 gap-4 lg:grid-cols-4">
+      <div className="mt-12 grid grid-cols-2 gap-4 lg:grid-cols-3">
         {stats.map((s, i) => (
           <StatCard key={s.label} stat={s} i={i} />
         ))}
       </div>
 
-      <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
-        <div className="lg:col-span-1 rounded-2xl border border-line bg-panel p-6">
-          <h3 className="font-display text-lg text-ink mb-5">Platform split</h3>
-          <div className="space-y-4">
-            {platforms.map((p, i) => (
-              <Bar key={p.name} label={p.name} value={p.value} i={i} color="bg-cyan" />
-            ))}
-          </div>
-        </div>
-
-        <div className="lg:col-span-1 rounded-2xl border border-line bg-panel p-6">
+      <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-2">
+        <div className="rounded-2xl border border-line bg-panel p-6">
           <h3 className="font-display text-lg text-ink mb-5">Age breakdown</h3>
           <div className="space-y-4">
             {demographics.map((d, i) => (
               <Bar key={d.label} label={d.label} value={d.value} i={i} color="bg-coral" />
             ))}
           </div>
+          <p className="mt-5 text-xs text-ink-faint leading-relaxed">
+            83% of the audience is between 18 and 34 — especially relevant for brands
+            reaching young designers, creators, students, freelancers, and creative professionals.
+          </p>
         </div>
 
-        <div className="lg:col-span-1 rounded-2xl border border-line bg-panel p-6">
-          <h3 className="font-display text-lg text-ink mb-5">Top geographies</h3>
-          <div className="space-y-4">
-            {geo.map((g, i) => (
-              <Bar key={g.label} label={g.label} value={g.value} i={i} color="bg-gold" />
+        <div className="rounded-2xl border border-line bg-panel p-6">
+          <h3 className="font-display text-lg text-ink mb-5">Reel performance</h3>
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
+            {reelStats.map((r) => (
+              <div key={r.label}>
+                <div className="font-display text-xl text-cyan">{r.value}</div>
+                <div className="mt-1 text-xs text-ink-faint">{r.label}</div>
+              </div>
             ))}
           </div>
+          <p className="mt-5 text-xs text-ink-faint leading-relaxed">
+            Reels generate over 93% of total content views and 99% of total
+            interactions — the format already driving the most discovery on the page.
+          </p>
+        </div>
+      </div>
+
+      <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div className="rounded-2xl border border-line bg-panel p-6">
+          <div className="font-display text-2xl text-ink">Strong U.S. market presence</div>
+          <p className="mt-2 text-sm text-ink-dim">
+            7.8% of the audience is U.S.-based, with meaningful reach across the rest of the world.
+          </p>
+        </div>
+        <div className="rounded-2xl border border-line bg-panel p-6">
+          <div className="font-display text-2xl text-ink">28% from non-followers</div>
+          <p className="mt-2 text-sm text-ink-dim">
+            The content continues to reach beyond the existing follower base — discoverable, and capable of introducing brands to new creative audiences.
+          </p>
         </div>
       </div>
     </section>

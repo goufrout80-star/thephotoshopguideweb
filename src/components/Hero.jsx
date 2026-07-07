@@ -1,12 +1,12 @@
 import { motion } from 'motion/react'
-import { ArrowUpRight, PlayCircle } from 'lucide-react'
+import { ArrowUpRight, Layers } from 'lucide-react'
 import LayerStack from './LayerStack'
 import MagneticButton from './MagneticButton'
 import { trackEvent } from '../lib/analytics'
 
 const ticker = [
-  '480K SUBSCRIBERS', '12.4M MONTHLY VIEWS', '91% AVG. RETENTION',
-  '6.8% ENGAGEMENT', '3 PLATFORMS', 'MEDIA KIT 2026',
+  '136K+ FOLLOWERS', '1.35M+ CONTENT VIEWS', '83% AGED 18–34',
+  '7.8% U.S. AUDIENCE', '863K REEL VIEWS', '47K+ INTERACTIONS',
 ]
 
 export default function Hero() {
@@ -32,13 +32,10 @@ export default function Hero() {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.25, type: 'spring', stiffness: 100, damping: 16 }}
-            className="font-display text-[13vw] sm:text-6xl lg:text-[4.2rem] font-medium leading-[0.98] tracking-tight text-ink"
+            className="font-display text-[9.5vw] sm:text-5xl lg:text-[3.4rem] font-medium leading-[1.05] tracking-tight text-ink"
           >
-            Photoshop,
-            <br />
-            decoded for
-            <br />
-            <span className="text-cyan">the next</span> generation.
+            Where creative brands meet one of the biggest
+            <span className="text-cyan"> Photoshop and design</span> communities online.
           </motion.h1>
 
           <motion.p
@@ -47,9 +44,20 @@ export default function Hero() {
             transition={{ delay: 0.4, duration: 0.5 }}
             className="mt-6 max-w-md text-lg text-ink-dim"
           >
-            480K creators already trust The Photoshop Guide for tutorials,
-            presets, and gear reviews we'd actually recommend to a friend.
-            Let's make your product the next thing they fall in love with.
+            The Photoshop Guide connects brands with a large, focused audience
+            of designers, editors, creators, and Photoshop users who actively
+            follow content around visual creativity, editing, and better
+            design workflows.
+          </motion.p>
+
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.45, duration: 0.5 }}
+            className="mt-4 max-w-md text-sm text-ink-faint leading-relaxed"
+          >
+            If your brand helps people create, edit, design, or improve their
+            workflow, The Photoshop Guide is the right place to be seen.
           </motion.p>
 
           <motion.div
@@ -59,22 +67,20 @@ export default function Hero() {
             className="mt-9 flex flex-wrap items-center gap-4"
           >
             <MagneticButton
-              href="/media-kit.html"
-              target="_blank"
-              rel="noopener"
-              onClick={() => trackEvent('media_kit_opened')}
+              href="#contact"
+              onClick={() => trackEvent('partner_cta_clicked')}
               className="group inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3.5 text-sm font-semibold text-canvas transition-colors hover:bg-cyan active:scale-[0.97]"
             >
-              Get the media kit
+              Partner With Us
               <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </MagneticButton>
             <a
-              href="#case-study"
-              onClick={() => trackEvent('past_campaign_clicked')}
+              href="#packages"
+              onClick={() => trackEvent('view_packages_clicked')}
               className="group inline-flex items-center gap-2 rounded-full border border-line px-6 py-3.5 text-sm font-medium text-ink-dim hover:text-ink hover:border-ink-dim transition-colors"
             >
-              <PlayCircle className="h-4 w-4" />
-              See a past campaign
+              <Layers className="h-4 w-4" />
+              View Packages
             </a>
           </motion.div>
         </div>

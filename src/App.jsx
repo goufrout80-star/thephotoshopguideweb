@@ -2,7 +2,7 @@ import Nav from './components/Nav'
 import Hero from './components/Hero'
 import StatsSection from './components/StatsSection'
 import Pillars from './components/Pillars'
-import CaseStudy from './components/CaseStudy'
+import Results from './components/Results'
 import Partners from './components/Partners'
 import Packages from './components/Packages'
 import ContactFooter from './components/ContactFooter'
@@ -23,7 +23,7 @@ function App() {
         <Hero />
         <StatsSection />
         <Pillars />
-        <CaseStudy />
+        <Results />
         <Partners />
         <Packages />
         <ContactFooter />

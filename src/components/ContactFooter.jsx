@@ -1,46 +1,50 @@
 import { useState } from 'react'
 import { motion } from 'motion/react'
-import { ArrowUpRight, Check, Layers, Mail, AtSign, Video } from 'lucide-react'
+import { ArrowUpRight, Check, Layers, Mail, AtSign } from 'lucide-react'
 import MagneticButton from './MagneticButton'
+import Toast from './Toast'
 import { supabase } from '../lib/supabase'
 import { trackEvent } from '../lib/analytics'
+import { buildVisitorMeta } from '../lib/visitorMeta'
 
 export default function ContactFooter() {
   const [status, setStatus] = useState('idle') // idle | submitting | success | error
+  const [toast, setToast] = useState(null)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     const form = new FormData(e.target)
     const name = form.get('name')
     const company = form.get('company')
+    const email = form.get('email')
     const budget = form.get('budget')
-    const message = form.get('message')
+    const rawMessage = form.get('message')
 
-    if (supabase) {
-      setStatus('submitting')
-      const { error } = await supabase
-        .from('sponsorship_inquiries')
-        .insert({ name, company, budget, message })
+    // page_contacts has no dedicated budget column — fold it into the
+    // message body so the dashboard still sees it.
+    const message = budget ? `Estimated budget: ${budget}\n\n${rawMessage}` : rawMessage
 
-      if (error) {
-        setStatus('error')
-        return
-      }
-      trackEvent('sponsorship_inquiry_submitted', { method: 'supabase' })
-      setStatus('success')
-      e.target.reset()
+    if (!supabase) {
+      setToast('Contact form is not configured — missing Supabase credentials.')
       return
     }
 
-    // Fallback while Supabase isn't configured yet — opens the visitor's
-    // own email client instead of silently discarding the inquiry.
-    const subject = encodeURIComponent(`Sponsorship inquiry — ${company || 'New brand'}`)
-    const body = encodeURIComponent(
-      `Name: ${name}\nCompany: ${company}\nBudget range: ${budget}\n\n${message}`
-    )
-    trackEvent('sponsorship_inquiry_submitted', { method: 'mailto' })
-    window.location.href = `mailto:hello@thephotoshopguide.com?subject=${subject}&body=${body}`
+    setStatus('submitting')
+    const meta = await buildVisitorMeta()
+
+    const { error } = await supabase
+      .from('page_contacts')
+      .insert({ name, company, email, message, site: 'thephotoshopguide', meta })
+
+    if (error) {
+      setStatus('idle')
+      setToast("Something went wrong sending your brief — please try again or email us directly.")
+      return
+    }
+
+    trackEvent('sponsorship_inquiry_submitted', { method: 'supabase' })
     setStatus('success')
+    e.target.reset()
   }
 
   return (
@@ -64,9 +68,6 @@ export default function ContactFooter() {
               <a href="mailto:hello@thephotoshopguide.com" className="flex items-center gap-3 text-sm text-ink-dim hover:text-ink transition-colors">
                 <Mail className="h-4 w-4 text-cyan" aria-hidden="true" /> hello@thephotoshopguide.com
               </a>
-              <a href="#" aria-label="YouTube: @thephotoshopguide" className="flex items-center gap-3 text-sm text-ink-dim hover:text-ink transition-colors">
-                <Video className="h-4 w-4 text-cyan" aria-hidden="true" /> @thephotoshopguide
-              </a>
               <a href="#" aria-label="Instagram: @thephotoshopguide" className="flex items-center gap-3 text-sm text-ink-dim hover:text-ink transition-colors">
                 <AtSign className="h-4 w-4 text-cyan" aria-hidden="true" /> @thephotoshopguide
               </a>
@@ -84,8 +85,10 @@ export default function ContactFooter() {
               <label className="sr-only" htmlFor="contact-name">Your name</label>
               <input id="contact-name" required name="name" placeholder="Your name" className="rounded-xl border border-line bg-canvas px-4 py-3 text-sm text-ink placeholder:text-ink-faint outline-none focus:border-cyan/60 transition-colors" />
               <label className="sr-only" htmlFor="contact-company">Company</label>
-              <input id="contact-company" required name="company" placeholder="Company" className="rounded-xl border border-line bg-canvas px-4 py-3 text-sm text-ink placeholder:text-ink-faint outline-none focus:border-cyan/60 transition-colors" />
+              <input id="contact-company" name="company" placeholder="Company" className="rounded-xl border border-line bg-canvas px-4 py-3 text-sm text-ink placeholder:text-ink-faint outline-none focus:border-cyan/60 transition-colors" />
             </div>
+            <label className="sr-only" htmlFor="contact-email">Email</label>
+            <input id="contact-email" required type="email" name="email" placeholder="Work email" className="w-full rounded-xl border border-line bg-canvas px-4 py-3 text-sm text-ink placeholder:text-ink-faint outline-none focus:border-cyan/60 transition-colors" />
             <label className="sr-only" htmlFor="contact-budget">Estimated budget</label>
             <select id="contact-budget" name="budget" defaultValue="" className="w-full rounded-xl border border-line bg-canvas px-4 py-3 text-sm text-ink-dim outline-none focus:border-cyan/60 transition-colors">
               <option value="" disabled>Estimated budget</option>
@@ -109,7 +112,6 @@ export default function ContactFooter() {
                   <Check className="h-4 w-4" /> Brief sent
                 </>
               )}
-              {status === 'error' && 'Something went wrong — try again'}
               {status === 'idle' && (
                 <>
                   Send the brief
@@ -119,9 +121,7 @@ export default function ContactFooter() {
             </MagneticButton>
             {status === 'success' && (
               <p className="text-xs text-ink-faint text-center">
-                {supabase
-                  ? "We've got it — expect a reply within 2 business days."
-                  : 'Your email client should have opened with the brief pre-filled.'}
+                We've got it — expect a reply within 2 business days.
               </p>
             )}
           </motion.form>
@@ -147,6 +147,8 @@ export default function ContactFooter() {
           </div>
         </div>
       </footer>
+
+      <Toast message={toast} onDismiss={() => setToast(null)} />
     </>
   )
 }

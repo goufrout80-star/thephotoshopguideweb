@@ -1,5 +1,5 @@
 import { Layers, Printer } from 'lucide-react'
-import { stats, platforms, demographics, geo, pillars, packages } from './data/content'
+import { stats, reelStats, demographics, pillars, packages, customPartnership } from './data/content'
 
 export default function MediaKit() {
   return (
@@ -22,13 +22,13 @@ export default function MediaKit() {
           </span>
           <div>
             <h1 className="font-display text-2xl font-semibold text-ink">The Photoshop Guide</h1>
-            <p className="text-sm text-ink-dim">Sponsorship Media Kit — {new Date().getFullYear()}</p>
+            <p className="text-sm text-ink-dim">Media Kit — {new Date().getFullYear()}</p>
           </div>
         </header>
 
         <section className="mt-8">
           <h2 className="font-mono text-xs tracking-widest text-cyan print-accent uppercase">Audience Snapshot</h2>
-          <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
             {stats.map((s) => (
               <div key={s.label} className="print-card rounded-xl border border-line bg-panel p-4">
                 <div className="font-display text-xl text-ink">
@@ -40,18 +40,7 @@ export default function MediaKit() {
           </div>
         </section>
 
-        <section className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-3">
-          <div>
-            <h3 className="text-sm font-semibold text-ink mb-2">Platform split</h3>
-            <ul className="space-y-1 text-sm text-ink-dim">
-              {platforms.map((p) => (
-                <li key={p.name} className="flex justify-between">
-                  <span>{p.name}</span>
-                  <span className="font-mono">{p.value}%</span>
-                </li>
-              ))}
-            </ul>
-          </div>
+        <section className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2">
           <div>
             <h3 className="text-sm font-semibold text-ink mb-2">Age breakdown</h3>
             <ul className="space-y-1 text-sm text-ink-dim">
@@ -64,12 +53,12 @@ export default function MediaKit() {
             </ul>
           </div>
           <div>
-            <h3 className="text-sm font-semibold text-ink mb-2">Top geographies</h3>
+            <h3 className="text-sm font-semibold text-ink mb-2">Reel performance</h3>
             <ul className="space-y-1 text-sm text-ink-dim">
-              {geo.map((g) => (
-                <li key={g.label} className="flex justify-between">
-                  <span>{g.label}</span>
-                  <span className="font-mono">{g.value}%</span>
+              {reelStats.map((r) => (
+                <li key={r.label} className="flex justify-between">
+                  <span>{r.label}</span>
+                  <span className="font-mono">{r.value}</span>
                 </li>
               ))}
             </ul>
@@ -89,8 +78,8 @@ export default function MediaKit() {
         </section>
 
         <section className="mt-8">
-          <h2 className="font-mono text-xs tracking-widest text-cyan print-accent uppercase">Sponsorship Packages</h2>
-          <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
+          <h2 className="font-mono text-xs tracking-widest text-cyan print-accent uppercase">Packages</h2>
+          <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
             {packages.map((pkg) => (
               <div key={pkg.name} className="print-card rounded-xl border border-line bg-panel p-4">
                 <h3 className="text-sm font-semibold text-ink">{pkg.name}</h3>
@@ -98,6 +87,11 @@ export default function MediaKit() {
                 <p className="mt-2 text-xs text-ink-dim leading-relaxed">{pkg.desc}</p>
               </div>
             ))}
+          </div>
+          <div className="print-card mt-3 rounded-xl border border-line bg-panel p-4">
+            <h3 className="text-sm font-semibold text-ink">{customPartnership.name}</h3>
+            <div className="mt-1 font-mono text-sm text-cyan print-accent">{customPartnership.cta}</div>
+            <p className="mt-2 text-xs text-ink-dim leading-relaxed">{customPartnership.desc}</p>
           </div>
         </section>
 
