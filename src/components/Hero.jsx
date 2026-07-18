@@ -101,7 +101,7 @@ export default function Hero() {
             {[...ticker, ...ticker].map((t, i) => (
               <span key={i} className="flex items-center gap-10 whitespace-nowrap font-mono text-xs tracking-widest text-ink-faint">
                 {t}
-                <span className="text-cyan">✦</span>
+                <span className={['text-cyan', 'text-coral', 'text-gold', 'text-green'][i % 4]}>✦</span>
               </span>
             ))}
           </div>

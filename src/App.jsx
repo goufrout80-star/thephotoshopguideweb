@@ -9,12 +9,14 @@ import ContactFooter from './components/ContactFooter'
 import ScrollProgress from './components/ScrollProgress'
 import BrushCursor from './components/BrushCursor'
 import ToolDock from './components/ToolDock'
+import Loader from './components/Loader'
 import { ToolProvider } from './context/ToolContext'
 
 function App() {
   return (
     <ToolProvider>
       <div className="min-h-screen bg-canvas">
+        <Loader />
         <div className="grain-overlay" />
         <ScrollProgress />
         <BrushCursor />

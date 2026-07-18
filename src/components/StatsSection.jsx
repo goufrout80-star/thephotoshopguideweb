@@ -3,6 +3,10 @@ import { useCountUp } from '../hooks/useCountUp'
 import { stats, reelStats, demographics } from '../data/content'
 import SectionHeading from './SectionHeading'
 
+// Blue leads (~70%), with red/gold/green accents distributed like
+// Photoshop layer labels across the six cards.
+const suffixAccents = ['text-cyan', 'text-cyan', 'text-coral', 'text-cyan', 'text-gold', 'text-green']
+
 function StatCard({ stat, i }) {
   const decimals = String(stat.value).includes('.') ? 1 : 0
   const { ref, display } = useCountUp(stat.value, { decimals })
@@ -17,7 +21,7 @@ function StatCard({ stat, i }) {
     >
       <div className="font-display text-4xl font-medium text-ink tabular-nums">
         {display}
-        <span className="text-cyan">{stat.suffix}</span>
+        <span className={suffixAccents[i % suffixAccents.length]}>{stat.suffix}</span>
       </div>
       <div className="mt-2 text-sm text-ink-dim">{stat.label}</div>
       <div className="mt-1 text-xs font-mono text-ink-faint">{stat.sub}</div>
@@ -66,7 +70,7 @@ export default function StatsSection() {
           <h3 className="font-display text-lg text-ink mb-5">Age breakdown</h3>
           <div className="space-y-4">
             {demographics.map((d, i) => (
-              <Bar key={d.label} label={d.label} value={d.value} i={i} color="bg-coral" />
+              <Bar key={d.label} label={d.label} value={d.value} i={i} color={['bg-coral', 'bg-gold', 'bg-green'][i % 3]} />
             ))}
           </div>
           <p className="mt-5 text-xs text-ink-faint leading-relaxed">
@@ -78,9 +82,11 @@ export default function StatsSection() {
         <div className="rounded-2xl border border-line bg-panel p-6">
           <h3 className="font-display text-lg text-ink mb-5">Reel performance</h3>
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
-            {reelStats.map((r) => (
+            {reelStats.map((r, i) => (
               <div key={r.label}>
-                <div className="font-display text-xl text-cyan">{r.value}</div>
+                <div className={`font-display text-xl ${['text-cyan', 'text-cyan', 'text-coral', 'text-gold', 'text-green'][i % 5]}`}>
+                  {r.value}
+                </div>
                 <div className="mt-1 text-xs text-ink-faint">{r.label}</div>
               </div>
             ))}

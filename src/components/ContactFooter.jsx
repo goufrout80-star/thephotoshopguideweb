@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'motion/react'
-import { ArrowUpRight, Check, Layers, Mail, AtSign } from 'lucide-react'
+import { ArrowUpRight, Check, Layers, Mail } from 'lucide-react'
 import MagneticButton from './MagneticButton'
 import Toast from './Toast'
 import { supabase } from '../lib/supabase'
@@ -52,7 +52,33 @@ export default function ContactFooter() {
       <section id="contact" className="relative mx-auto max-w-6xl px-6 py-24">
         <div className="pointer-events-none absolute inset-x-0 -top-20 mx-auto h-72 w-[80%] rounded-full bg-cyan/10 blur-[120px]" />
 
-        <div className="relative grid grid-cols-1 gap-12 rounded-3xl border border-line bg-panel p-8 sm:p-12 lg:grid-cols-2">
+        <div
+          onMouseMove={(e) => {
+            const rect = e.currentTarget.getBoundingClientRect()
+            e.currentTarget.style.setProperty('--mx', `${e.clientX - rect.left}px`)
+            e.currentTarget.style.setProperty('--my', `${e.clientY - rect.top}px`)
+          }}
+          className="group relative grid grid-cols-1 gap-12 rounded-3xl border border-line bg-panel p-8 sm:p-12 lg:grid-cols-2"
+        >
+          {/* Mouse-tracking spotlight — lights up the card border/surface under the cursor */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 rounded-3xl opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+            style={{
+              background:
+                'radial-gradient(480px circle at var(--mx, 50%) var(--my, 50%), rgba(52,211,255,0.08), transparent 65%)',
+            }}
+          />
+          {/* Palette hairline — the site's 70/10/10/10 colors as a top edge */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-8 top-0 h-px sm:inset-x-12"
+            style={{
+              background:
+                'linear-gradient(90deg, var(--color-cyan) 0%, var(--color-cyan) 70%, var(--color-coral) 78%, var(--color-gold) 88%, var(--color-green) 100%)',
+              opacity: 0.6,
+            }}
+          />
           <div>
             <p className="font-mono text-xs tracking-widest text-cyan uppercase">Let's Work Together</p>
             <h2 className="mt-3 font-display text-3xl sm:text-4xl font-medium tracking-tight text-ink">
@@ -64,12 +90,9 @@ export default function ContactFooter() {
               ideas attached.
             </p>
 
-            <div className="mt-8 space-y-3">
+            <div className="mt-8">
               <a href="mailto:hello@thephotoshopguide.com" className="flex items-center gap-3 text-sm text-ink-dim hover:text-ink transition-colors">
                 <Mail className="h-4 w-4 text-cyan" aria-hidden="true" /> hello@thephotoshopguide.com
-              </a>
-              <a href="#" aria-label="Instagram: @thephotoshopguide" className="flex items-center gap-3 text-sm text-ink-dim hover:text-ink transition-colors">
-                <AtSign className="h-4 w-4 text-cyan" aria-hidden="true" /> @thephotoshopguide
               </a>
             </div>
           </div>
@@ -109,7 +132,7 @@ export default function ContactFooter() {
               {status === 'submitting' && 'Sending…'}
               {status === 'success' && (
                 <>
-                  <Check className="h-4 w-4" /> Brief sent
+                  <Check className="h-4 w-4 text-green" /> Brief sent
                 </>
               )}
               {status === 'idle' && (
@@ -135,6 +158,11 @@ export default function ContactFooter() {
               <Layers className="h-3.5 w-3.5 text-cyan" aria-hidden="true" />
             </span>
             <span className="font-display text-sm text-ink">The Photoshop Guide</span>
+            <span aria-hidden="true" className="ml-2 flex items-center gap-1">
+              {['bg-cyan', 'bg-coral', 'bg-gold', 'bg-green'].map((c) => (
+                <span key={c} className={`h-1.5 w-1.5 rounded-full ${c}`} />
+              ))}
+            </span>
           </a>
           <div className="flex flex-col items-center gap-2 sm:flex-row sm:gap-5">
             <p className="text-xs text-ink-faint">

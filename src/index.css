@@ -22,6 +22,8 @@
   --color-coral-soft: #ff6b4a1f;
   --color-gold: #ffb84d;
   --color-gold-soft: #ffb84d1f;
+  --color-green: #4ade80;
+  --color-green-soft: #4ade801f;
 
   --animate-marquee: marquee 32s linear infinite;
   --animate-marquee-slow: marquee 55s linear infinite;

@@ -82,7 +82,7 @@ export default function Packages() {
         transition={{ type: 'spring', stiffness: 110, damping: 16 }}
         className="relative mt-6 overflow-hidden rounded-2xl border border-line bg-panel p-8 sm:p-10"
       >
-        <div className="pointer-events-none absolute -top-24 right-0 h-64 w-64 rounded-full bg-cyan/10 blur-[100px]" />
+        <div className="pointer-events-none absolute -top-24 right-0 h-64 w-64 rounded-full bg-gold/10 blur-[100px]" />
         <div className="relative flex flex-col items-start gap-6 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h3 className="font-display text-xl text-ink">{customPartnership.name}</h3>

@@ -5,14 +5,17 @@ import SectionHeading from './SectionHeading'
 const points = [
   {
     icon: Target,
+    accent: { bg: 'bg-coral-soft', ring: 'ring-coral/30', text: 'text-coral' },
     text: 'Creative audiences don’t respond to random advertising. They respond to useful ideas, clear demonstrations, and tools that solve real problems inside their workflow.',
   },
   {
     icon: Sparkles,
+    accent: { bg: 'bg-cyan-soft', ring: 'ring-cyan/30', text: 'text-cyan' },
     text: 'We build the message around what the audience cares about: better design, faster editing, smarter workflows, useful tools, and stronger creative results.',
   },
   {
     icon: MessageSquareQuote,
+    accent: { bg: 'bg-gold-soft', ring: 'ring-gold/30', text: 'text-gold' },
     text: 'The strongest promotion isn’t just visibility — it’s being shown inside the right creative context, to the right audience, through content they already follow.',
   },
 ]
@@ -38,8 +41,8 @@ export default function Partners() {
               transition={{ delay: i * 0.1, type: 'spring', stiffness: 110, damping: 16 }}
               className="flex flex-col rounded-2xl border border-line bg-panel p-6"
             >
-              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-cyan-soft ring-1 ring-cyan/30">
-                <p.icon className="h-4 w-4 text-cyan" />
+              <span className={`flex h-9 w-9 items-center justify-center rounded-lg ${p.accent.bg} ring-1 ${p.accent.ring}`}>
+                <p.icon className={`h-4 w-4 ${p.accent.text}`} />
               </span>
               <p className="mt-4 flex-1 text-ink-dim leading-relaxed">{p.text}</p>
             </motion.div>
