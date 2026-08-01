@@ -9,7 +9,7 @@ import { buildVisitorMeta } from '../lib/visitorMeta'
 const ENDPOINT = 'https://eawftyzjuwccwuxdszxf.supabase.co/functions/v1/submit-page-contact'
 
 export default function ContactFooter() {
-  const [status, setStatus] = useState('idle') // idle | submitting | success
+  const [status, setStatus] = useState('idle')
   const [reference, setReference] = useState('')
   const [toast, setToast] = useState(null)
 
@@ -19,10 +19,6 @@ export default function ContactFooter() {
 
     const formElement = event.currentTarget
     const form = new FormData(formElement)
-    if (form.get('consent') !== 'on') {
-      setToast('Please confirm that The Photoshop Guide may use these details to reply to your inquiry.')
-      return
-    }
 
     setStatus('submitting')
     setToast(null)
@@ -38,11 +34,9 @@ export default function ContactFooter() {
           payload: {
             name: form.get('name'),
             company: form.get('company'),
-            email: form.get('email'),
             website: form.get('website'),
-            budget: form.get('budget'),
+            email: form.get('email'),
             message: form.get('message'),
-            consent: true,
             meta: {
               ...visitorMeta,
               referrer: document.referrer || 'Direct',
@@ -58,10 +52,10 @@ export default function ContactFooter() {
 
       const result = await response.json().catch(() => ({}))
       if (!response.ok || result.ok !== true || !result.reference) {
-        throw new Error(result.error || 'We could not receive your partnership brief.')
+        throw new Error(result.error || 'We could not receive your message.')
       }
 
-      trackEvent('sponsorship_inquiry_submitted', { method: 'jwu_pages', reference: result.reference })
+      trackEvent('contact_message_submitted', { method: 'jwu_pages', reference: result.reference })
       setReference(result.reference)
       setStatus('success')
       formElement.reset()
@@ -100,12 +94,12 @@ export default function ContactFooter() {
             }}
           />
           <div>
-            <p className="font-mono text-xs tracking-widest text-cyan uppercase">Let's Work Together</p>
+            <p className="font-mono text-xs tracking-widest text-cyan uppercase">Contact Us</p>
             <h2 className="mt-3 font-display text-3xl sm:text-4xl font-medium tracking-tight text-ink">
-              Tell us about your product. We'll pitch the edit.
+              Tell us about your company or partnership idea.
             </h2>
             <p className="mt-4 text-ink-dim leading-relaxed max-w-sm">
-              A real person reads every brief. Your inquiry is stored securely in our partnership workspace and reviewed within 2 business days.
+              Send a simple message. Our team will review it and reply to your email within 2 business days.
             </p>
 
             <div className="mt-8">
@@ -128,51 +122,41 @@ export default function ContactFooter() {
             </div>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <label className="sr-only" htmlFor="contact-name">Your name</label>
-              <input id="contact-name" required name="name" minLength={2} maxLength={120} placeholder="Your name" className="rounded-xl border border-line bg-canvas px-4 py-3 text-sm text-ink placeholder:text-ink-faint outline-none focus:border-cyan/60 transition-colors" />
-              <label className="sr-only" htmlFor="contact-company">Company</label>
-              <input id="contact-company" name="company" maxLength={180} placeholder="Company" className="rounded-xl border border-line bg-canvas px-4 py-3 text-sm text-ink placeholder:text-ink-faint outline-none focus:border-cyan/60 transition-colors" />
+              <div>
+                <label className="sr-only" htmlFor="contact-name">Full name</label>
+                <input id="contact-name" required name="name" minLength={2} maxLength={120} autoComplete="name" placeholder="Full name" className="w-full rounded-xl border border-line bg-canvas px-4 py-3 text-sm text-ink placeholder:text-ink-faint outline-none focus:border-cyan/60 transition-colors" />
+              </div>
+              <div>
+                <label className="sr-only" htmlFor="contact-company">Company name</label>
+                <input id="contact-company" required name="company" minLength={2} maxLength={180} autoComplete="organization" placeholder="Company name" className="w-full rounded-xl border border-line bg-canvas px-4 py-3 text-sm text-ink placeholder:text-ink-faint outline-none focus:border-cyan/60 transition-colors" />
+              </div>
             </div>
 
+            <label className="sr-only" htmlFor="contact-website">Website link</label>
+            <input id="contact-website" type="url" name="website" maxLength={500} autoComplete="url" placeholder="Website link (optional)" className="w-full rounded-xl border border-line bg-canvas px-4 py-3 text-sm text-ink placeholder:text-ink-faint outline-none focus:border-cyan/60 transition-colors" />
+
             <label className="sr-only" htmlFor="contact-email">Email</label>
-            <input id="contact-email" required type="email" name="email" maxLength={254} placeholder="Work email" className="w-full rounded-xl border border-line bg-canvas px-4 py-3 text-sm text-ink placeholder:text-ink-faint outline-none focus:border-cyan/60 transition-colors" />
+            <input id="contact-email" required type="email" name="email" maxLength={254} autoComplete="email" placeholder="Email" className="w-full rounded-xl border border-line bg-canvas px-4 py-3 text-sm text-ink placeholder:text-ink-faint outline-none focus:border-cyan/60 transition-colors" />
 
-            <label className="sr-only" htmlFor="contact-website">Product or company website</label>
-            <input id="contact-website" name="website" maxLength={500} placeholder="Product or company website (optional)" className="w-full rounded-xl border border-line bg-canvas px-4 py-3 text-sm text-ink placeholder:text-ink-faint outline-none focus:border-cyan/60 transition-colors" />
-
-            <label className="sr-only" htmlFor="contact-budget">Estimated budget</label>
-            <select id="contact-budget" name="budget" defaultValue="" className="w-full rounded-xl border border-line bg-canvas px-4 py-3 text-sm text-ink-dim outline-none focus:border-cyan/60 transition-colors">
-              <option value="">Estimated budget (optional)</option>
-              <option>Under $2,500</option>
-              <option>$2,500 – $7,500</option>
-              <option>$7,500 – $20,000</option>
-              <option>$20,000+</option>
-            </select>
-
-            <label className="sr-only" htmlFor="contact-message">What are you looking to promote?</label>
-            <textarea id="contact-message" required name="message" minLength={20} maxLength={5000} rows={4} placeholder="What are you looking to promote?" className="w-full resize-none rounded-xl border border-line bg-canvas px-4 py-3 text-sm text-ink placeholder:text-ink-faint outline-none focus:border-cyan/60 transition-colors" />
-
-            <label className="flex cursor-pointer items-start gap-3 text-xs leading-relaxed text-ink-dim">
-              <input required type="checkbox" name="consent" className="mt-0.5 h-4 w-4 shrink-0 accent-cyan" />
-              <span>I agree that The Photoshop Guide and JUST WHY US may use these details to review and reply to this partnership inquiry.</span>
-            </label>
+            <label className="sr-only" htmlFor="contact-message">Message</label>
+            <textarea id="contact-message" required name="message" minLength={10} maxLength={5000} rows={5} placeholder="Your message" className="w-full resize-none rounded-xl border border-line bg-canvas px-4 py-3 text-sm text-ink placeholder:text-ink-faint outline-none focus:border-cyan/60 transition-colors" />
 
             <MagneticButton
               as="button"
               type="submit"
               strength={0.15}
-              disabled={status === 'submitting'}
+              disabled={status === 'submitting' || status === 'success'}
               className="group inline-flex w-full items-center justify-center gap-2 rounded-xl bg-cyan px-6 py-3.5 text-sm font-semibold text-canvas hover:bg-ink transition-colors disabled:opacity-60"
             >
-              {status === 'submitting' && 'Sending securely…'}
+              {status === 'submitting' && 'Sending message…'}
               {status === 'success' && (
                 <>
-                  <Check className="h-4 w-4 text-green" /> Brief received
+                  <Check className="h-4 w-4 text-green" /> Message received
                 </>
               )}
               {status === 'idle' && (
                 <>
-                  Send the brief
+                  Send message
                   <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </>
               )}
@@ -180,7 +164,7 @@ export default function ContactFooter() {
 
             {status === 'success' && (
               <p className="text-xs text-ink-faint text-center">
-                We've got it. Reference <strong className="text-cyan">{reference}</strong>. Expect a reply within 2 business days.
+                Message received. Reference <strong className="text-cyan">{reference}</strong>. Expect a reply within 2 business days.
               </p>
             )}
           </motion.form>
